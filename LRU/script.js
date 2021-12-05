@@ -27,11 +27,12 @@ LRUCache.prototype.get = function (key) {
  * @return {void}
  */
 LRUCache.prototype.put = function (key, value) {
-  const previousVal = this.get(key);
-  if (previousVal === -1) {
+  const previousVal = this.map.get(key);
+  if (previousVal === undefined) {
     if (this.map.size === this.capacity) {
-      for (let key of this.map) {
-        this.map.delete(key);
+      for (let firstKey of this.map.keys()) {
+        console.log(this);
+        this.map.delete(firstKey);
         break;
       }
     }
@@ -45,3 +46,14 @@ LRUCache.prototype.put = function (key, value) {
  * var param_1 = obj.get(key)
  * obj.put(key,value)
  */
+
+const lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // 缓存是 {1=1}
+lRUCache.put(2, 2); // 缓存是 {1=1, 2=2}
+lRUCache.get(1); // 返回 1
+lRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}
+console.log(lRUCache.get(2)); // 返回 -1 (未找到)
+lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}
+lRUCache.get(1); // 返回 -1 (未找到)
+lRUCache.get(3); // 返回 3
+console.log(lRUCache.get(4)); // 返回 4
