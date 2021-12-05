@@ -19,6 +19,18 @@ LRUCache.prototype.get = function (key) {
   } else {
     return -1;
   }
+  //   let val = null;
+  //   if (this.array.length === 0) return -1;
+  //   this.array.forEach((item, index) => {
+  //     if (item.hasOwnProperty(key)) {
+  //       val = item[key];
+  //       this.array.splice(index, 1);
+  //       this.array.push({ [key]: val });
+  //     } else {
+  //       val = -1;
+  //     }
+  //   });
+  //   return val;
 };
 
 /**
@@ -27,17 +39,31 @@ LRUCache.prototype.get = function (key) {
  * @return {void}
  */
 LRUCache.prototype.put = function (key, value) {
-  const previousVal = this.map.get(key);
-  if (previousVal === undefined) {
+  const previousVal = this.get(key);
+  if (previousVal === -1) {
     if (this.map.size === this.capacity) {
       for (let firstKey of this.map.keys()) {
-        console.log(this);
         this.map.delete(firstKey);
         break;
       }
     }
   }
   this.map.set(key, value);
+  //   if (!this.array.length) {
+  //     this.array.push({ [key]: value });
+  //   } else {
+  //     this.array.forEach((item, index) => {
+  //       if (!item.hasOwnProperty(key) && index === this.capacity ) {
+  //         if (this.array.length === this.capacity) {
+  //           this.array.splice(0, 1);
+  //         }
+  //         this.array.push({ [key]: value });
+  //       } else {
+  //         item[key] = value;
+  //       }
+  //     });
+
+  //   }
 };
 
 /**
@@ -48,12 +74,10 @@ LRUCache.prototype.put = function (key, value) {
  */
 
 const lRUCache = new LRUCache(2);
-lRUCache.put(1, 1); // 缓存是 {1=1}
-lRUCache.put(2, 2); // 缓存是 {1=1, 2=2}
-lRUCache.get(1); // 返回 1
-lRUCache.put(3, 3); // 该操作会使得关键字 2 作废，缓存是 {1=1, 3=3}
+lRUCache.put(2, 6); // 缓存是 {1=1}
+lRUCache.put(1, 5); // 缓存是 {1=1, 2=2}
+
+lRUCache.put(1, 2);
+console.log(lRUCache.get(1)); // 返回 1
+
 console.log(lRUCache.get(2)); // 返回 -1 (未找到)
-lRUCache.put(4, 4); // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}
-lRUCache.get(1); // 返回 -1 (未找到)
-lRUCache.get(3); // 返回 3
-console.log(lRUCache.get(4)); // 返回 4
