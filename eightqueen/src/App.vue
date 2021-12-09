@@ -3,7 +3,8 @@
 	<!-- <s-directive-page></s-directive-page> -->
 	<!-- <s-text></s-text> -->
 	<!-- <s-radio /> -->
-	<s-custom></s-custom>
+	<!-- <s-custom></s-custom> -->
+	<s-lay></s-lay>
 </template>
 
 <script>
@@ -12,6 +13,7 @@
 	import SText from "./components/SText.vue";
 	import SRadio from "./components/SRadio.vue";
 	import SCustom from "./components/SCustom.vue";
+	import SLay from "./components/Slay.vue";
 	export default {
 		name: "App",
 		components: {
@@ -20,6 +22,7 @@
 			SText,
 			SRadio,
 			SCustom,
+			SLay,
 		},
 	};
 </script>

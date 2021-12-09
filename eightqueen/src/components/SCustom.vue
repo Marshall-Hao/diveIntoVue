@@ -5,26 +5,26 @@
 </template>
 
 <script>
+	let list = [
+		{
+			name: "f@ck",
+			value: "A",
+		},
+		{
+			name: "S@ck",
+			value: "B",
+		},
+		{
+			name: "An@l",
+			value: "C",
+		},
+	];
 	import SCustomSelect from "./SCustomSelect.vue";
 	export default {
 		components: {
 			SCustomSelect,
 		},
 		data() {
-			let list = [
-				{
-					name: "f@ck",
-					value: "A",
-				},
-				{
-					name: "S@ck",
-					value: "B",
-				},
-				{
-					name: "An@l",
-					value: "C",
-				},
-			];
 			return {
 				selected: list[0],
 				list,
