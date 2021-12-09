@@ -1,16 +1,25 @@
 <template>
 	<!-- <eight-queen /> -->
-	<s-directive-page></s-directive-page>
+	<!-- <s-directive-page></s-directive-page> -->
+	<!-- <s-text></s-text> -->
+	<!-- <s-radio /> -->
+	<s-custom></s-custom>
 </template>
 
 <script>
 	import EightQueen from "./components/EightQueen.vue";
 	import SDirectivePage from "./components/SDirectivePage.vue";
+	import SText from "./components/SText.vue";
+	import SRadio from "./components/SRadio.vue";
+	import SCustom from "./components/SCustom.vue";
 	export default {
 		name: "App",
 		components: {
 			EightQueen,
 			SDirectivePage,
+			SText,
+			SRadio,
+			SCustom,
 		},
 	};
 </script>
