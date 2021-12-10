@@ -1,11 +1,11 @@
 <template>
 	<div v-if="loading">loading...</div>
+	<!-- * use slot to transfrom the data from childcomponent to parentcomponent -->
 	<slot v-else :data="data"></slot>
 </template>
 
 <script>
 	export default {
-		props: ["url"],
 		data() {
 			return {
 				loading: true,
