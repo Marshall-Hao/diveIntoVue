@@ -5,8 +5,9 @@
 	<!-- <s-radio /> -->
 	<!-- <s-custom></s-custom> -->
 	<!-- <s-lay></s-lay> -->
-	<s-custom-wrap-input v-model:value="value"></s-custom-wrap-input
-	>{{ "----" + value }}
+	<!-- <s-custom-wrap-input v-model:value="value"></s-custom-wrap-input
+	>{{ "----" + value }} -->
+	<s-body></s-body>
 </template>
 
 <script>
@@ -17,6 +18,7 @@
 	import SCustom from "./components/SCustom.vue";
 	import SLay from "./components/Slay.vue";
 	import SCustomWrapInput from "./components/SCustomWrapInput.vue";
+	import SBody from "./components/SBody.vue";
 	export default {
 		name: "App",
 		components: {
@@ -27,6 +29,7 @@
 			SCustom,
 			SLay,
 			SCustomWrapInput,
+			SBody,
 		},
 		data() {
 			return {

@@ -22,5 +22,5 @@ import App from "./App.vue";
 
 const app = createApp(App);
 
-app.use(ElementPlus);
+app.use(ElementPlus); // * use plugings with app.use
 app.mount("#app");
