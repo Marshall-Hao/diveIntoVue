@@ -1,18 +1,42 @@
 let x;
 let y;
+let z;
 let active;
 // let f = (n) => n * 100 + 100;
-let onXChange = function (fn) {
+let watch = function (fn) {
   active = fn;
   active();
   active = null;
 };
 
-let onYChange = function (fn) {
-  active = fn;
-  active();
-  active = null;
+let queue = [];
+let nextTick = (cb) =>
+  Promise.resolve()
+    .then(cb)
+    .then(() => {
+      console.log("then then then");
+    });
+let queueJob = (job) => {
+  if (!queue.includes(job)) {
+    queue.push(job);
+    nextTick(flushJobs);
+    nextTick(flushJobs);
+  }
 };
+
+let flushJobs = () => {
+  let job;
+  while ((job = queue.shift()) !== undefined) {
+    console.log(job);
+    job();
+  }
+};
+
+// let onYChange = function (fn) {
+//   active = fn;
+//   active();
+//   active = null;
+// };
 
 class Dep {
   // ! only static function can be read from the whole class
@@ -23,15 +47,20 @@ class Dep {
   //       this.deps.add(active);
   //     }
   //   }
-  deps = new Set(); // ! treat as a function
+  constructor() {
+    this.deps = new Set();
+  }
+  //   deps = new Set(); // ! treat as a constructor, simple way
+  test = "test";
   depend() {
     if (active) {
       this.deps.add(active);
       console.log(this.deps);
+      console.log(this.test);
     }
   }
   notify() {
-    this.deps.forEach((dep) => dep());
+    this.deps.forEach((dep) => queueJob(dep));
     console.log(this.deps);
   }
 }
@@ -51,31 +80,35 @@ let ref = (initValue) => {
     set(newValue) {
       value = newValue;
       dep.notify();
+      console.log(dep);
     },
   });
 };
 
 x = ref(1);
 y = ref(5);
-
-onXChange(() => {
+z = ref(6);
+watch(() => {
   const ele = document.createElement("span");
-  ele.innerText = `hello ${x.value}`;
+  ele.innerText = `hello ${x.value} ${y.value} ${z.value}`;
   ele.style.color = "red";
   document.body.append(ele);
 });
 
-onYChange(() => {
-  const ele = document.createElement("span");
-  ele.innerText = `hello! ${y.value}`;
-  document.body.append(ele);
-});
-
 x.value = 2;
-x.value = 3;
-x.value = 4;
 y.value = 6;
-x.value = 7;
+z.value = 7;
+// onYChange(() => {
+//   const ele = document.createElement("span");
+//   ele.innerText = `hello!  ${x.value} ${y.value}`;
+//   document.body.append(ele);
+// });
+
+// x.value = 2;
+// x.value = 3;
+// x.value = 4;
+// y.value = 6;
+// x.value = 7;
 // function Animal() {
 //   this.name = "marshall";
 // }
