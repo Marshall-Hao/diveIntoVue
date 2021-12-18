@@ -2,6 +2,7 @@ let active;
 
 let effect = (fn, options = {}) => {
   let effect = (...args) => {
+    // ! 为了避免对 调用函数fn的属性污染, 所以在用effect进行了一次封装,小tips
     try {
       active = effect;
       return fn(...args);
@@ -11,12 +12,25 @@ let effect = (fn, options = {}) => {
   };
 
   effect.options = options;
-  console.log(effect.options);
+  effect.deps = [];
   return effect;
 };
+
+let cleanUpEffect = (effect) => {
+  const { deps } = effect;
+
+  if (deps.length) {
+    for (let i = 0; i < deps.length; i++) {
+      deps[i].delete(effect);
+    }
+  }
+};
+
 let watchEffect = function (cb) {
   let runner = effect(cb);
   runner();
+
+  return () => cleanUpEffect(runner);
 };
 
 let queue = [];
@@ -40,6 +54,7 @@ class Dep {
   depend() {
     if (active) {
       this.deps.add(active);
+      active.deps.push(this.deps);
     }
   }
   notify() {
@@ -50,19 +65,48 @@ class Dep {
   }
 }
 
-let ref = (initValue) => {
-  let value = initValue;
+// let push = Array.prototype.push;
+// let arrayMethods = Object.create(Array.prototype);
+
+// arrayMethods.push = function (...args) {
+//   push.apply(this, [...args]);
+//   this._dep.notify();
+// };
+
+let createReactive = (target, prop, value) => {
   let dep = new Dep();
-  return Object.defineProperty({}, "value", {
-    get() {
+
+  // ! 1st way by Proxy, can also work for array
+  return new Proxy(target, {
+    get(target, prop) {
       dep.depend();
-      return value;
+      return Reflect.get(target, prop);
     },
-    set(newValue) {
-      value = newValue;
+    set(target, prop, value) {
       dep.notify();
+      return Reflect.set(target, prop, value);
     },
   });
+  // * 2nd way by object defineproperty
+  //   return Object.defineProperty(target, prop , {
+  //     get() {
+  //       dep.depend();
+  //       return value;
+  //     },
+  //     set(newValue) {
+  //       value = newValue;
+  //       dep.notify();
+  //     },
+  //   });
+};
+
+let ref = (initValue) => {
+  //   let value = initValue;
+  createReactive({}, "value", initValue);
+};
+
+const set = (target, prop, initValue) => {
+  return createReactive(target, prop, initValue);
 };
 
 let computed = (fn) => {
@@ -87,14 +131,53 @@ let computed = (fn) => {
   };
 };
 
-let count = ref(0);
+let watch = (source, cb, options = {}) => {
+  const { immediate } = options;
+  let getter = () => {
+    return source();
+  };
+  let oldValue;
+  const applyCb = () => {
+    let newValue = runner();
+    if (newValue !== oldValue) {
+      cb(newValue, oldValue);
+      oldValue = newValue;
+    }
+  };
+  const runner = effect(getter, {
+    schedule: applyCb,
+  });
+
+  if (immediate) {
+    applyCb();
+  } else {
+    oldValue = runner();
+  }
+};
+
+// let count = ref(0);
+let count = set([], 1, 0);
+console.log(count);
 let computedValue = computed(() => count.value + 3);
+let value = 0;
 document.getElementById("add").addEventListener("click", function () {
-  count.value++;
-  debugger;
+  value++;
+  count.push(value);
 });
 let str;
-watchEffect(() => {
-  str = `hello ${count.value} ${computedValue.value}`;
+let stop = watchEffect(() => {
+  str = `hello ${count.join(",")}`;
+  //   str = `hello ${count.value} ${computedValue.value}`;
   document.getElementById("app").innerText = str;
 });
+
+// setTimeout(() => {
+//   stop();
+// }, 3000);
+watch(
+  () => count.value,
+  (newValue, preValue) => {
+    console.log(newValue, preValue);
+  },
+  { immediate: true }
+);
