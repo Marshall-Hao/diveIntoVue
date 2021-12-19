@@ -7,7 +7,12 @@
 	<!-- <s-lay></s-lay> -->
 	<!-- <s-custom-wrap-input v-model:value="value"></s-custom-wrap-input
 	>{{ "----" + value }} -->
-	<s-body></s-body>
+	<!-- <s-body></s-body> -->
+	<button @click="addCount(2)">addCount</button>
+	<button @click="asyncAddCount">asyncAddCount</button>
+	{{ count1 }}
+	{{ count2 }}
+	{{ doubleCount }}
 </template>
 
 <script>
@@ -19,6 +24,7 @@
 	import SLay from "./components/Slay.vue";
 	import SCustomWrapInput from "./components/SCustomWrapInput.vue";
 	import SBody from "./components/SBody.vue";
+	import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 	export default {
 		name: "App",
 		components: {
@@ -31,10 +37,21 @@
 			SCustomWrapInput,
 			SBody,
 		},
+		computed: {
+			...mapState({
+				count1: (state) => state.count1,
+				count2: (state) => state.count2,
+			}),
+			...mapGetters(["doubleCount"]),
+		},
 		data() {
 			return {
 				value: "333",
 			};
+		},
+		methods: {
+			...mapMutations(["addCount"]),
+			...mapActions(["asyncAddCount"]),
 		},
 	};
 </script>

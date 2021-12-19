@@ -1,3 +1,5 @@
+import { Store } from "./vuex.js";
+
 let active;
 
 let effect = (fn, options = {}) => {
@@ -73,7 +75,7 @@ class Dep {
 //   this._dep.notify();
 // };
 
-let createReactive = (target, prop, value) => {
+export let createReactive = (target, prop, value) => {
   let dep = new Dep();
 
   // ! 1st way by Proxy, can also work for array
@@ -160,14 +162,37 @@ let count = set([], 1, 0);
 console.log(count);
 let computedValue = computed(() => count.value + 3);
 let value = 0;
+
+const store = new Store({
+  state: {
+    count: 0,
+  },
+  mutations: {
+    addCount(state, payload = 1) {
+      state.count += payload;
+    },
+  },
+
+  plugins: [
+    function (store) {
+      store.subscribe((mutations, state) => {
+        console.log(mutations);
+        console.log(state);
+      });
+    },
+  ],
+});
+
 document.getElementById("add").addEventListener("click", function () {
-  value++;
-  count.push(value);
+  // value++;
+  // count.push(value);
+  store.commit("addCount", 2);
 });
 let str;
 let stop = watchEffect(() => {
-  str = `hello ${count.join(",")}`;
+  // str = `hello ${count.join(",")}`;
   //   str = `hello ${count.value} ${computedValue.value}`;
+  str = `hello ${store.state.count}`;
   document.getElementById("app").innerText = str;
 });
 
