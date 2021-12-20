@@ -8,11 +8,14 @@
 	<!-- <s-custom-wrap-input v-model:value="value"></s-custom-wrap-input
 	>{{ "----" + value }} -->
 	<!-- <s-body></s-body> -->
-	<button @click="addCount(2)">addCount</button>
+	<!-- <button @click="addCount(2)">addCount</button>
 	<button @click="asyncAddCount">asyncAddCount</button>
 	{{ count1 }}
 	{{ count2 }}
-	{{ doubleCount }}
+	{{ doubleCount }} -->
+	<router-link to="/foo">Foo</router-link>
+	<router-link to="/bar">Bar</router-link>
+	<router-view></router-view>
 </template>
 
 <script>
