@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-21 04:54:30
- * @LastEditTime: 2021-12-21 06:33:49
+ * @LastEditTime: 2021-12-28 02:37:15
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /diveIntoVue/demo-juejin-boilerplate/src/module/topic/store.js
@@ -14,7 +14,7 @@ export const LIST_TYPE = {
   NEW: "new",
 };
 export const store = {
-  namespace: true,
+  namespaced: true,
   state: {
     activeType: LIST_TYPE.TOP,
     top: {

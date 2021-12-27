@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-05-22 16:55:41
+ * @LastEditTime: 2021-12-28 03:06:22
+ * @LastEditors: your name
+ * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @FilePath: /diveIntoVue/demo-juejin-boilerplate/server.js
+ */
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
@@ -17,6 +25,11 @@ const serve = (path, cache) =>
 app.use("/dist", serve("./dist", true));
 app.use("/public", serve("./public", true));
 const serverReady = setUpDevServer(app);
+
+const json = require("./mock.json");
+app.get("/api/lists", function(req, res) {
+  res.send(json);
+});
 
 app.get("*", (req, res) => {
   serverReady.then((clientCompiler) => {
