@@ -1,16 +1,20 @@
 <!--
  * @Author: your name
  * @Date: 2020-04-30 15:52:38
- * @LastEditTime: 2021-12-28 04:01:51
+ * @LastEditTime: 2021-12-29 05:00:52
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /diveIntoVue/demo-juejin-boilerplate/src/App.vue
 -->
 <template>
 	<div>
-		<div class="m-top">
+		<div class="m-top" :style="{ backgroundColor: theme.primary }">
 			<router-link
 				class="m-link"
+				:style="{
+					backgroundColor:
+						$route.name === nav.path ? theme.highlight : theme.primary,
+				}"
 				v-for="nav in navs"
 				:key="nav.path"
 				:to="nav.path"
@@ -20,17 +24,37 @@
 		<div class="m-content">
 			<router-view></router-view>
 		</div>
+
+		<div class="m-side">
+			Theme Switch:
+			<button @click="themeType = 'red'">Red</button>
+			<button @click="themeType = 'blue'">Blue</button>
+		</div>
 	</div>
 </template>
 
 <script>
 	import UTopic from "./module/topic/views/UTopic.vue";
 	import { LIST_TYPE } from "./module/topic/store";
+	import config from "./config/config";
 	export default {
 		components: {
 			UTopic,
 		},
+		data() {
+			return {
+				themeType: "blue",
+			};
+		},
+		provide() {
+			return {
+				theme: this.theme,
+			};
+		},
 		computed: {
+			theme() {
+				return config.get("theme")[this.themeType];
+			},
 			navs() {
 				return [
 					{
@@ -44,6 +68,14 @@
 					{
 						name: "热榜",
 						path: LIST_TYPE.HOT,
+					},
+					{
+						name: "关于我",
+						path: "/about",
+					},
+					{
+						name: "403",
+						path: "/403",
 					},
 				];
 			},
@@ -87,5 +119,11 @@
 	}
 	.router-link-active {
 		background: #00a6ff;
+	}
+	.m-side {
+		position: fixed;
+		left: 50%;
+		margin-left: 200px;
+		top: 100px;
 	}
 </style>
