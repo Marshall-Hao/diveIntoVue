@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-12-28 03:45:04
- * @LastEditTime: 2021-12-28 03:47:44
+ * @LastEditTime: 2021-12-29 19:57:39
  * @LastEditors: Please set LastEditors
  * @Description: 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  * @FilePath: /diveIntoVue/demo-juejin-boilerplate/src/module/topic/router.js
@@ -16,13 +16,13 @@ export const routes = [
     props: { type: LIST_TYPE.TOP },
   },
   {
-    name: LIST_TYPE.TOP,
+    name: LIST_TYPE.NEW,
     path: `/${LIST_TYPE.NEW}`,
     component: () => import("./views/UTopic.vue"),
     props: { type: LIST_TYPE.NEW },
   },
   {
-    name: LIST_TYPE.TOP,
+    name: LIST_TYPE.HOT,
     path: `/${LIST_TYPE.HOT}`,
     component: () => import("./views/UTopic.vue"),
     props: { type: LIST_TYPE.HOT },
